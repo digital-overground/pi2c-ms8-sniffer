@@ -1,0 +1,96 @@
+[22:42:46.075] Logging started
+[22:42:46.231] START detected
+[22:42:46.428] Address: 0x00 WRITE, ACK=False
+[22:42:46.819]   Data: 0x14, ACK=True
+[22:42:46.819] STOP detected
+
+[22:42:47.011] START detected
+[22:42:47.206] Address: 0x71 WRITE, ACK=False
+[22:42:47.207] STOP detected
+
+[22:42:47.207] START detected
+[22:42:47.403] Address: 0x41 READ, ACK=False
+[22:42:47.598]   Data: 0x00, ACK=False
+[22:42:47.794]   Data: 0xCA, ACK=True
+[22:42:47.989]   Data: 0xDA, ACK=True
+[22:42:48.184]   Data: 0x14, ACK=True
+[22:42:48.184] STOP detected
+
+[22:42:48.377] START detected
+[22:42:48.380] Address: 0x32 WRITE, ACK=False
+[22:42:48.767]   Data: 0xB3, ACK=True
+[22:42:48.767] STOP detected
+
+[22:42:48.768] START detected
+[22:42:48.963] Address: 0x64 WRITE, ACK=True
+[22:42:48.963] STOP detected
+
+[22:42:48.964] START detected
+[22:42:49.354] Address: 0x0B WRITE, ACK=False
+[22:42:49.548]   Data: 0x07, ACK=True
+[22:42:49.744]   Data: 0x37, ACK=True
+[22:42:49.939]   Data: 0x36, ACK=True
+[22:42:50.329]   Data: 0x15, ACK=False
+[22:42:50.718]   Data: 0x11, ACK=False
+[22:42:50.914]   Data: 0x80, ACK=True
+[22:42:50.914] STOP detected
+
+[22:42:50.914] START detected
+[22:42:51.110] Address: 0x3A WRITE, ACK=True
+[22:42:51.306]   Data: 0x7C, ACK=True
+[22:42:51.307] STOP detected
+
+[22:42:51.498] START detected
+[22:42:51.694] Address: 0x07 READ, ACK=False
+[22:42:51.694] STOP detected
+
+[22:42:51.695] START detected
+[22:42:51.889] Address: 0x50 READ, ACK=False
+[22:42:51.889] STOP detected
+
+[22:42:51.890] START detected
+[22:42:52.085] Address: 0x20 WRITE, ACK=False
+[22:42:52.280]   Data: 0x08, ACK=True
+[22:42:52.280] STOP detected
+
+[22:42:52.281] START detected
+[22:42:52.476] Address: 0x50 WRITE, ACK=False
+[22:42:52.671]   Data: 0xC0, ACK=False
+[22:42:52.867]   Data: 0x12, ACK=True
+[22:42:53.063]   Data: 0xCB, ACK=False
+[22:42:53.064] STOP detected
+
+[22:42:53.254] START detected
+[22:42:53.257] Address: 0x64 WRITE, ACK=True
+[22:42:53.257] STOP detected
+
+[22:42:53.450] START detected
+[22:42:53.645] Address: 0x48 READ, ACK=True
+[22:42:53.841]   Data: 0x6C, ACK=False
+[22:42:54.036]   Data: 0x48, ACK=True
+[22:42:54.232]   Data: 0xC6, ACK=False
+[22:42:54.432]   Data: 0x9D, ACK=True
+[22:42:54.623]   Data: 0x08, ACK=False
+[22:42:54.623] STOP detected
+
+[22:42:54.816] START detected
+[22:42:55.011] Address: 0x46 WRITE, ACK=True
+[22:42:55.011] STOP detected
+
+[22:42:55.011] START detected
+[22:42:55.207] Address: 0x37 WRITE, ACK=True
+[22:42:55.403]   Data: 0x62, ACK=False
+[22:42:55.598]   Data: 0x50, ACK=True
+[22:42:55.599] STOP detected
+
+[22:42:55.791] START detected
+[22:42:55.986] Address: 0x07 READ, ACK=True
+[22:42:55.987] STOP detected
+
+[22:42:55.987] START detected
+[22:42:56.182] Address: 0x03 WRITE, ACK=False
+[22:42:56.378]   Data: 0x2D, ACK=False
+[22:42:56.573]   Data: 0x03, ACK=True
+[22:42:56.768]   Data: 0x0D, ACK=True
+[22:42:56.963]   Data: 0x9D, ACK=True
+[22:42:57.090] Stopped by user.
