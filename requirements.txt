@@ -1,1 +1,2 @@
-pigpio>=1.78
+# Dependencies are now managed in pyproject.toml
+# Run: uv sync to install dependencies

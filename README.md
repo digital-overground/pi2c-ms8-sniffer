@@ -8,21 +8,22 @@ I2C bus sniffer for Raspberry Pi using pigpio library.
 - pigpio daemon running (`sudo pigpiod`)
 - Python 3.6+
 
-## Installation
+## Installation with uv
+
+1. Install uv: `curl -LsSf https://astral.sh/uv/install.sh | sh`
+2. Install dependencies: `uv sync`
+3. Run the sniffer: `uv run pi2c-sniffer --logfile i2c_log.txt`
+
+## Development
+
+- Install in development mode: `uv sync --dev`
+- Run with custom log file: `uv run pi2c-sniffer --logfile custom_log.txt`
+
+## Legacy Installation
 
 ```bash
 pip install -r requirements.txt
-```
-
-Or install as package:
-
-```bash
 pip install -e .
-```
-
-## Usage
-
-```bash
 python -m pi2c_sniffer
 ```
 
