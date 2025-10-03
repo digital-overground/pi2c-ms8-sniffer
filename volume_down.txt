@@ -1,0 +1,79 @@
+[21:50:49.127] Logging started
+[21:50:49.234] START detected
+[21:50:49.431] Address: 0x41 READ, ACK=True
+[21:50:49.626]   Data: 0x06, ACK=True
+[21:50:49.822]   Data: 0x02, ACK=True
+[21:50:50.017]   Data: 0x90, ACK=True
+[21:50:50.212]   Data: 0xA0, ACK=True
+[21:50:50.407]   Data: 0x38, ACK=True
+[21:50:50.602]   Data: 0xA0, ACK=True
+[21:50:50.603] STOP detected
+
+[21:50:50.795] START detected
+[21:50:50.990] Address: 0x10 READ, ACK=True
+[21:50:51.185]   Data: 0x80, ACK=True
+[21:50:51.380]   Data: 0x13, ACK=True
+[21:50:51.381] STOP detected
+
+[21:50:51.381] START detected
+[21:50:51.576] Address: 0x05 READ, ACK=False
+[21:50:51.771]   Data: 0x1C, ACK=True
+[21:50:51.966]   Data: 0x22, ACK=False
+[21:50:52.162]   Data: 0x2C, ACK=True
+[21:50:52.357]   Data: 0x10, ACK=True
+[21:50:52.357] STOP detected
+
+[21:50:52.358] START detected
+[21:50:52.746] Address: 0x34 READ, ACK=True
+[21:50:52.746] STOP detected
+
+[21:50:52.747] START detected
+[21:50:52.942] Address: 0x02 WRITE, ACK=True
+[21:50:53.137]   Data: 0x70, ACK=True
+[21:50:53.332]   Data: 0x20, ACK=True
+[21:50:53.332] STOP detected
+
+[21:50:53.333] START detected
+[21:50:53.528] Address: 0x43 WRITE, ACK=True
+[21:50:53.723]   Data: 0x0F, ACK=False
+[21:50:53.918]   Data: 0x10, ACK=False
+[21:50:53.918] STOP detected
+
+[21:50:53.919] START detected
+[21:50:54.114] Address: 0x10 READ, ACK=True
+[21:50:54.309]   Data: 0xA0, ACK=True
+[21:50:54.310] STOP detected
+
+[21:50:54.502] START detected
+[21:50:54.697] Address: 0x2A WRITE, ACK=True
+[21:50:54.894]   Data: 0x49, ACK=False
+[21:50:55.088]   Data: 0x84, ACK=True
+[21:50:55.285]   Data: 0xA0, ACK=True
+[21:50:55.480]   Data: 0x91, ACK=True
+[21:50:55.868]   Data: 0x80, ACK=True
+[21:50:55.868] STOP detected
+
+[21:50:55.869] START detected
+[21:50:56.064] Address: 0x36 WRITE, ACK=True
+[21:50:56.261]   Data: 0xC0, ACK=True
+[21:50:56.262] STOP detected
+
+[21:50:56.262] START detected
+[21:50:56.648] Address: 0x5C WRITE, ACK=False
+[21:50:56.844]   Data: 0x1E, ACK=True
+[21:50:57.039]   Data: 0x25, ACK=True
+[21:50:57.039] STOP detected
+
+[21:50:57.040] START detected
+[21:50:57.235] Address: 0x05 READ, ACK=False
+[21:50:57.430]   Data: 0x4B, ACK=False
+[21:50:57.431] STOP detected
+
+[21:50:57.431] START detected
+[21:50:57.626] Address: 0x02 WRITE, ACK=True
+[21:50:57.821]   Data: 0x2A, ACK=True
+[21:50:58.017]   Data: 0xC8, ACK=True
+[21:50:58.017] STOP detected
+
+[21:50:58.210] START detected
+[21:50:58.234] Stopped by user.
