@@ -1,10 +1,16 @@
 """I2C bus sniffer implementation."""
 
+import argparse
 from datetime import datetime
 
 import pigpio
 
-from .config import LOG_FILENAME, SCL, SDA
+# GPIO pin assignments
+SDA = 2  # GPIO 2 (pin 3)
+SCL = 3  # GPIO 3 (pin 5)
+
+# Log file settings
+LOG_FILENAME = "i2c_log.txt"
 
 
 class I2CSniffer:
@@ -90,3 +96,21 @@ class I2CSniffer:
         """Clean up resources."""
         self.logfile.close()
         self.pi.stop()
+
+
+def main():
+    """Main function."""
+    parser = argparse.ArgumentParser(description="I2C bus sniffer")
+    parser.add_argument(
+        "--logfile",
+        default="i2c_log.txt",
+        help="Log file name (default: i2c_log.txt)",
+    )
+    args = parser.parse_args()
+
+    sniffer = I2CSniffer(logfile=args.logfile)
+    sniffer.run()
+
+
+if __name__ == "__main__":
+    main()
