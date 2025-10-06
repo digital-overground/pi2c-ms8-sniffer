@@ -1,6 +1,11 @@
-"""I2C bus sniffer implementation."""
+#!/usr/bin/env python3
+"""
+I2C bus sniffer with timed capture and dual logging (console + file)
+"""
 
 import argparse
+import os
+import time
 from datetime import datetime
 
 import pigpio
@@ -9,17 +14,15 @@ import pigpio
 SDA = 2  # GPIO 2 (pin 3)
 SCL = 3  # GPIO 3 (pin 5)
 
-# Log file settings
-LOG_FILENAME = "i2c_log.txt"
-
 
 class I2CSniffer:
     """I2C bus sniffer using pigpio library."""
 
-    def __init__(self, sda_pin=SDA, scl_pin=SCL, logfile=LOG_FILENAME):
+    def __init__(self, sda_pin=SDA, scl_pin=SCL, logfile="i2c_log.txt", duration=20):
         self.sda = sda_pin
         self.scl = scl_pin
         self.logfile_name = logfile
+        self.duration = duration
         self._check_logfile()
         self.logfile = open(logfile, "w", buffering=1)
         self.pi = pigpio.pi()
@@ -29,8 +32,6 @@ class I2CSniffer:
 
     def _check_logfile(self):
         """Check if logfile exists and prompt for overwrite."""
-        import os
-
         if os.path.exists(self.logfile_name):
             response = input(
                 f"Log file '{self.logfile_name}' exists. Overwrite? (y/N): "
@@ -41,8 +42,9 @@ class I2CSniffer:
     def log(self, msg):
         """Log message with timestamp."""
         timestamp = datetime.now().strftime("%H:%M:%S.%f")[:-3]
-        print(f"[{timestamp}] {msg}")
-        self.logfile.write(f"[{timestamp}] {msg}\n")
+        line = f"[{timestamp}] {msg}"
+        print(line)
+        self.logfile.write(line + "\n")
 
     def wait_for_edge(self, pin, edge):
         """Wait for specific edge on GPIO pin."""
@@ -59,18 +61,22 @@ class I2CSniffer:
     def read_byte(self):
         """Read byte from I2C bus with ACK status."""
         val = 0
-        for i in range(8):
+        for _ in range(8):
             val = (val << 1) | self.read_bit()
         ack = self.read_bit()
         return val, ack
 
     def run(self):
-        """Main sniffer loop."""
-        self.log("Logging started")
+        """Main sniffer loop (runs for fixed duration)."""
+        self.log(f"Logging started for {self.duration} seconds")
+        start_time = time.time()
 
         try:
-            while True:
+            while time.time() - start_time < self.duration:
+                # Wait for START condition (SDA low while SCL high)
                 while self.pi.read(self.sda) == 1 or self.pi.read(self.scl) == 0:
+                    if time.time() - start_time >= self.duration:
+                        raise TimeoutError
                     pass
 
                 self.log("START detected")
@@ -80,6 +86,7 @@ class I2CSniffer:
                 rw_str = "READ" if rw else "WRITE"
                 self.log(f"Address: 0x{addr:02X} {rw_str}, ACK={ack == 0}")
 
+                # Read until STOP condition
                 while True:
                     if self.pi.read(self.scl) == 1 and self.pi.read(self.sda) == 1:
                         self.log("STOP detected\n")
@@ -87,28 +94,37 @@ class I2CSniffer:
                     byte, ack = self.read_byte()
                     self.log(f"  Data: 0x{byte:02X}, ACK={ack == 0}")
 
+        except TimeoutError:
+            self.log(f"Capture complete after {self.duration} seconds.")
         except KeyboardInterrupt:
             self.log("Stopped by user.")
+        finally:
             self.cleanup()
-            print("\nLogging complete.")
 
     def cleanup(self):
         """Clean up resources."""
+        self.log("Closing resources.")
         self.logfile.close()
         self.pi.stop()
 
 
 def main():
     """Main function."""
-    parser = argparse.ArgumentParser(description="I2C bus sniffer")
+    parser = argparse.ArgumentParser(description="I2C bus sniffer with timed capture")
     parser.add_argument(
         "--logfile",
         default="i2c_log.txt",
         help="Log file name (default: i2c_log.txt)",
     )
+    parser.add_argument(
+        "--duration",
+        type=int,
+        default=20,
+        help="Capture duration in seconds (default: 20)",
+    )
     args = parser.parse_args()
 
-    sniffer = I2CSniffer(logfile=args.logfile)
+    sniffer = I2CSniffer(logfile=args.logfile, duration=args.duration)
     sniffer.run()
 
 
