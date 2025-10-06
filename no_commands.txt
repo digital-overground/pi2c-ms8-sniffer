@@ -1,0 +1,175 @@
+[11:41:55.599] Logging started for 20 seconds
+[11:41:55.763] START detected
+[11:41:55.959] Address: 0x40 READ, ACK=True
+[11:41:55.959] STOP detected
+
+[11:41:55.960] START detected
+[11:41:56.154] Address: 0x51 WRITE, ACK=True
+[11:41:56.154] STOP detected
+
+[11:41:56.155] START detected
+[11:41:56.350] Address: 0x41 WRITE, ACK=False
+[11:41:56.350] STOP detected
+
+[11:41:56.350] START detected
+[11:41:56.545] Address: 0x42 WRITE, ACK=False
+[11:41:56.739]   Data: 0x03, ACK=True
+[11:41:56.740] STOP detected
+
+[11:41:56.740] START detected
+[11:41:56.935] Address: 0x06 WRITE, ACK=True
+[11:41:57.131]   Data: 0x16, ACK=True
+[11:41:57.131] STOP detected
+
+[11:41:57.131] START detected
+[11:41:57.327] Address: 0x20 WRITE, ACK=True
+[11:41:57.327] STOP detected
+
+[11:41:57.519] START detected
+[11:41:57.714] Address: 0x60 READ, ACK=True
+[11:41:57.909]   Data: 0xC0, ACK=False
+[11:41:57.910] STOP detected
+
+[11:41:57.911] START detected
+[11:41:58.106] Address: 0x07 WRITE, ACK=True
+[11:41:58.302]   Data: 0x34, ACK=True
+[11:41:58.302] STOP detected
+
+[11:41:58.302] START detected
+[11:41:58.497] Address: 0x68 READ, ACK=True
+[11:41:58.692]   Data: 0x88, ACK=False
+[11:41:58.887]   Data: 0xD0, ACK=True
+[11:41:59.082]   Data: 0x7E, ACK=True
+[11:41:59.277]   Data: 0xD8, ACK=True
+[11:41:59.471]   Data: 0x6F, ACK=False
+[11:41:59.666]   Data: 0x1B, ACK=True
+[11:41:59.862]   Data: 0x29, ACK=True
+[11:41:59.863] STOP detected
+
+[11:42:00.055] START detected
+[11:42:00.058] Address: 0x64 WRITE, ACK=True
+[11:42:00.058] STOP detected
+
+[11:42:00.250] START detected
+[11:42:00.445] Address: 0x20 READ, ACK=False
+[11:42:00.640]   Data: 0x81, ACK=True
+[11:42:00.641] STOP detected
+
+[11:42:00.641] START detected
+[11:42:00.837] Address: 0x36 WRITE, ACK=True
+[11:42:01.032]   Data: 0x89, ACK=True
+[11:42:01.227]   Data: 0xCA, ACK=True
+[11:42:01.422]   Data: 0x10, ACK=False
+[11:42:01.618]   Data: 0x28, ACK=True
+[11:42:01.813]   Data: 0x90, ACK=True
+[11:42:01.813] STOP detected
+
+[11:42:02.005] START detected
+[11:42:02.201] Address: 0x21 READ, ACK=True
+[11:42:02.201] STOP detected
+
+[11:42:02.202] START detected
+[11:42:02.396] Address: 0x00 WRITE, ACK=False
+[11:42:02.591]   Data: 0x41, ACK=True
+[11:42:02.591] STOP detected
+
+[11:42:02.592] START detected
+[11:42:02.787] Address: 0x43 WRITE, ACK=True
+[11:42:02.982]   Data: 0x1F, ACK=True
+[11:42:03.178]   Data: 0x10, ACK=True
+[11:42:03.373]   Data: 0x4C, ACK=True
+[11:42:03.568]   Data: 0x78, ACK=True
+[11:42:03.569] STOP detected
+
+[11:42:03.761] START detected
+[11:42:03.956] Address: 0x01 READ, ACK=False
+[11:42:03.957] STOP detected
+
+[11:42:03.957] START detected
+[11:42:04.152] Address: 0x41 WRITE, ACK=False
+[11:42:04.152] STOP detected
+
+[11:42:04.153] START detected
+[11:42:04.348] Address: 0x06 READ, ACK=False
+[11:42:04.543]   Data: 0x96, ACK=True
+[11:42:04.738]   Data: 0x19, ACK=True
+[11:42:04.933]   Data: 0x5B, ACK=True
+[11:42:05.128]   Data: 0x12, ACK=True
+[11:42:05.323]   Data: 0x89, ACK=True
+[11:42:05.519]   Data: 0x34, ACK=False
+[11:42:05.714]   Data: 0x1C, ACK=True
+[11:42:05.909]   Data: 0x19, ACK=True
+[11:42:06.104]   Data: 0xC8, ACK=True
+[11:42:06.299]   Data: 0x48, ACK=True
+[11:42:06.494]   Data: 0xFC, ACK=True
+[11:42:06.495] STOP detected
+
+[11:42:06.687] START detected
+[11:42:06.882] Address: 0x04 WRITE, ACK=True
+[11:42:07.077]   Data: 0x21, ACK=False
+[11:42:07.272]   Data: 0xC0, ACK=False
+[11:42:07.273] STOP detected
+
+[11:42:07.273] START detected
+[11:42:07.469] Address: 0x00 READ, ACK=True
+[11:42:07.664]   Data: 0x1A, ACK=True
+[11:42:07.859]   Data: 0x32, ACK=False
+[11:42:08.054]   Data: 0x33, ACK=True
+[11:42:08.249]   Data: 0x0F, ACK=False
+[11:42:08.444]   Data: 0x9B, ACK=False
+[11:42:08.639]   Data: 0x17, ACK=True
+[11:42:08.835]   Data: 0x24, ACK=True
+[11:42:09.030]   Data: 0x49, ACK=True
+[11:42:09.030] STOP detected
+
+[11:42:09.223] START detected
+[11:42:09.418] Address: 0x52 READ, ACK=True
+[11:42:09.418] STOP detected
+
+[11:42:09.419] START detected
+[11:42:09.614] Address: 0x00 READ, ACK=False
+[11:42:09.810]   Data: 0x0A, ACK=True
+[11:42:10.198]   Data: 0x48, ACK=True
+[11:42:10.393]   Data: 0x81, ACK=False
+[11:42:10.394] STOP detected
+
+[11:42:10.394] START detected
+[11:42:10.589] Address: 0x02 READ, ACK=False
+[11:42:10.784]   Data: 0x45, ACK=True
+[11:42:10.979]   Data: 0x01, ACK=False
+[11:42:10.979] STOP detected
+
+[11:42:10.979] START detected
+[11:42:11.174] Address: 0x03 WRITE, ACK=True
+[11:42:11.174] STOP detected
+
+[11:42:11.174] START detected
+[11:42:11.370] Address: 0x03 WRITE, ACK=True
+[11:42:11.565]   Data: 0x04, ACK=False
+[11:42:11.760]   Data: 0x09, ACK=False
+[11:42:11.955]   Data: 0x12, ACK=True
+[11:42:12.150]   Data: 0x0C, ACK=True
+[11:42:12.345]   Data: 0x02, ACK=True
+[11:42:12.540]   Data: 0x0E, ACK=False
+[11:42:12.735]   Data: 0x0F, ACK=True
+[11:42:12.931]   Data: 0x24, ACK=True
+[11:42:13.125]   Data: 0x13, ACK=False
+[11:42:13.320]   Data: 0x09, ACK=True
+[11:42:13.516]   Data: 0x0A, ACK=True
+[11:42:13.711]   Data: 0x87, ACK=True
+[11:42:13.906]   Data: 0x53, ACK=True
+[11:42:14.101]   Data: 0x1A, ACK=False
+[11:42:14.296]   Data: 0x1A, ACK=True
+[11:42:14.491]   Data: 0x90, ACK=False
+[11:42:14.686]   Data: 0x26, ACK=True
+[11:42:14.687] STOP detected
+
+[11:42:14.687] START detected
+[11:42:14.882] Address: 0x71 WRITE, ACK=True
+[11:42:15.077]   Data: 0x98, ACK=True
+[11:42:15.465]   Data: 0xA2, ACK=True
+[11:42:15.660]   Data: 0x41, ACK=True
+[11:42:15.855]   Data: 0xC0, ACK=False
+[11:42:15.855] STOP detected
+
+[11:42:15.855] Closing resources.

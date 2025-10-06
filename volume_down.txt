@@ -1,160 +1,178 @@
-[22:38:48.764] Logging started
-[22:38:48.791] START detected
-[22:38:48.989] Address: 0x3C WRITE, ACK=True
-[22:38:48.989] STOP detected
+[12:35:47.042] Logging started for 20 seconds
+[12:35:47.182] START detected
+[12:35:47.379] Master initiated transaction: Address=0x41, WRITE, ACK=True
+[12:35:47.379] STOP detected
 
-[22:38:49.181] START detected
-[22:38:49.378] Address: 0x67 WRITE, ACK=True
-[22:38:49.573]   Data: 0x15, ACK=True
-[22:38:49.768]   Data: 0x1A, ACK=True
-[22:38:49.963]   Data: 0x0D, ACK=True
-[22:38:50.158]   Data: 0x28, ACK=False
-[22:38:50.353]   Data: 0x0E, ACK=True
-[22:38:50.548]   Data: 0x1D, ACK=True
-[22:38:50.744]   Data: 0x1A, ACK=True
-[22:38:50.939]   Data: 0x29, ACK=False
-[22:38:51.134]   Data: 0x6C, ACK=True
-[22:38:51.329]   Data: 0xD8, ACK=True
-[22:38:51.719]   Data: 0x8C, ACK=True
-[22:38:51.719] STOP detected
+[12:35:47.380] START detected
+[12:35:47.574] Master initiated transaction: Address=0x5A, READ, ACK=True
+[12:35:47.770]   Data: 0xC5, ACK=True
+[12:35:47.965]   Data: 0x08, ACK=False
+[12:35:48.160]   Data: 0x68, ACK=True
+[12:35:48.356]   Data: 0x28, ACK=True
+[12:35:48.356] STOP detected
 
-[22:38:51.720] START detected
-[22:38:51.915] Address: 0x40 WRITE, ACK=False
-[22:38:51.915] STOP detected
+[12:35:48.548] START detected
+[12:35:48.743] Master initiated transaction: Address=0x40, WRITE, ACK=True
+[12:35:48.744] STOP detected
 
-[22:38:51.915] START detected
-[22:38:52.110] Address: 0x6C WRITE, ACK=True
-[22:38:52.111] STOP detected
+[12:35:48.745] START detected
+[12:35:48.939] Master initiated transaction: Address=0x03, WRITE, ACK=True
+[12:35:48.939] STOP detected
 
-[22:38:52.303] START detected
-[22:38:52.499] Address: 0x61 READ, ACK=True
-[22:38:52.694]   Data: 0x4C, ACK=False
-[22:38:52.695] STOP detected
+[12:35:48.939] START detected
+[12:35:49.134] Master initiated transaction: Address=0x04, WRITE, ACK=False
+[12:35:49.330]   Data: 0xCD, ACK=True
+[12:35:49.525]   Data: 0x19, ACK=False
+[12:35:49.721]   Data: 0x12, ACK=True
+[12:35:49.916]   Data: 0x3C, ACK=True
+[12:35:49.916] STOP detected
 
-[22:38:52.695] START detected
-[22:38:52.890] Address: 0x7E WRITE, ACK=True
-[22:38:53.085]   Data: 0x18, ACK=True
-[22:38:53.283]   Data: 0x66, ACK=False
-[22:38:53.668]   Data: 0x94, ACK=False
-[22:38:53.864]   Data: 0x03, ACK=True
-[22:38:53.864] STOP detected
+[12:35:50.109] START detected
+[12:35:50.304] Master initiated transaction: Address=0x04, WRITE, ACK=True
+[12:35:50.304] STOP detected
 
-[22:38:53.865] START detected
-[22:38:54.059] Address: 0x06 WRITE, ACK=True
-[22:38:54.256]   Data: 0x54, ACK=False
-[22:38:54.451]   Data: 0x6D, ACK=True
-[22:38:54.645]   Data: 0x2A, ACK=True
-[22:38:54.646] STOP detected
+[12:35:50.305] START detected
+[12:35:50.499] Master initiated transaction: Address=0x40, WRITE, ACK=False
+[12:35:50.500] STOP detected
 
-[22:38:54.646] START detected
-[22:38:54.841] Address: 0x10 WRITE, ACK=False
-[22:38:54.841] STOP detected
+[12:35:50.501] START detected
+[12:35:50.696] Master initiated transaction: Address=0x03, WRITE, ACK=True
+[12:35:50.891]   Data: 0x3C, ACK=True
+[12:35:51.087]   Data: 0x2E, ACK=True
+[12:35:51.281]   Data: 0x12, ACK=True
+[12:35:51.476]   Data: 0x1B, ACK=True
+[12:35:51.671]   Data: 0x10, ACK=True
+[12:35:51.867]   Data: 0x6A, ACK=True
+[12:35:52.062]   Data: 0x36, ACK=True
+[12:35:52.257]   Data: 0x2E, ACK=True
+[12:35:52.452]   Data: 0x35, ACK=True
+[12:35:52.647]   Data: 0x16, ACK=True
+[12:35:52.842]   Data: 0x02, ACK=True
+[12:35:53.038]   Data: 0x26, ACK=True
+[12:35:53.038] STOP detected
 
-[22:38:54.842] START detected
-[22:38:55.229] Address: 0x62 WRITE, ACK=False
-[22:38:55.424]   Data: 0x21, ACK=False
-[22:38:55.620]   Data: 0x46, ACK=False
-[22:38:55.816]   Data: 0xB8, ACK=True
-[22:38:56.207]   Data: 0x33, ACK=True
-[22:38:56.208] STOP detected
+[12:35:53.230] START detected
+[12:35:53.425] Master initiated transaction: Address=0x20, WRITE, ACK=False
+[12:35:53.622]   Data: 0x07, ACK=True
+[12:35:53.817]   Data: 0x04, ACK=True
+[12:35:54.011]   Data: 0x13, ACK=True
+[12:35:54.207]   Data: 0xC0, ACK=False
+[12:35:54.402]   Data: 0x46, ACK=False
+[12:35:54.598]   Data: 0x98, ACK=True
+[12:35:54.793]   Data: 0x58, ACK=True
+[12:35:54.988]   Data: 0x62, ACK=False
+[12:35:55.183]   Data: 0x5B, ACK=False
+[12:35:55.378]   Data: 0x01, ACK=True
+[12:35:55.573]   Data: 0x44, ACK=True
+[12:35:55.768]   Data: 0x2F, ACK=True
+[12:35:55.963]   Data: 0x0D, ACK=True
+[12:35:56.158]   Data: 0x0A, ACK=True
+[12:35:56.353]   Data: 0x8B, ACK=True
+[12:35:56.548]   Data: 0x0C, ACK=False
+[12:35:56.548] STOP detected
 
-[22:38:56.400] START detected
-[22:38:56.595] Address: 0x60 READ, ACK=True
-[22:38:56.596] STOP detected
+[12:35:56.549] START detected
+[12:35:56.744] Master initiated transaction: Address=0x1A, READ, ACK=True
+[12:35:56.938]   Data: 0x51, ACK=True
+[12:35:57.134]   Data: 0x11, ACK=True
+[12:35:57.329]   Data: 0x34, ACK=True
+[12:35:57.524]   Data: 0x48, ACK=True
+[12:35:57.719]   Data: 0xC8, ACK=False
+[12:35:57.915]   Data: 0x5C, ACK=True
+[12:35:58.110]   Data: 0xC2, ACK=False
+[12:35:58.110] STOP detected
 
-[22:38:56.596] START detected
-[22:38:56.791] Address: 0x45 READ, ACK=True
-[22:38:56.792] STOP detected
+[12:35:58.302] START detected
+[12:35:58.498] Master initiated transaction: Address=0x20, WRITE, ACK=True
+[12:35:58.693]   Data: 0xC5, ACK=True
+[12:35:58.693] STOP detected
 
-[22:38:56.792] START detected
-[22:38:57.181] Address: 0x52 READ, ACK=False
-[22:38:57.376]   Data: 0x38, ACK=True
-[22:38:57.572]   Data: 0x81, ACK=False
-[22:38:57.961]   Data: 0x51, ACK=True
-[22:38:57.961] STOP detected
+[12:35:58.694] START detected
+[12:35:58.888] Master initiated transaction: Address=0x40, READ, ACK=True
+[12:35:58.888] STOP detected
 
-[22:38:57.961] START detected
-[22:38:58.156] Address: 0x67 WRITE, ACK=False
-[22:38:58.353]   Data: 0x68, ACK=True
-[22:38:58.548]   Data: 0x27, ACK=False
-[22:38:58.743]   Data: 0x24, ACK=False
-[22:38:58.743] STOP detected
+[12:35:58.889] START detected
+[12:35:59.083] Master initiated transaction: Address=0x09, READ, ACK=True
+[12:35:59.084] STOP detected
 
-[22:38:58.936] START detected
-[22:38:59.131] Address: 0x40 WRITE, ACK=False
-[22:38:59.326]   Data: 0x89, ACK=True
-[22:38:59.522]   Data: 0x84, ACK=True
-[22:38:59.718]   Data: 0x37, ACK=True
-[22:38:59.718] STOP detected
+[12:35:59.084] START detected
+[12:35:59.279] Master initiated transaction: Address=0x50, WRITE, ACK=True
+[12:35:59.473]   Data: 0x13, ACK=True
+[12:35:59.474] STOP detected
 
-[22:38:59.719] START detected
-[22:38:59.914] Address: 0x1E WRITE, ACK=False
-[22:39:00.108]   Data: 0x62, ACK=True
-[22:39:00.109] STOP detected
+[12:35:59.475] START detected
+[12:35:59.670] Master initiated transaction: Address=0x00, READ, ACK=True
+[12:35:59.865]   Data: 0x08, ACK=False
+[12:36:00.061]   Data: 0x2C, ACK=True
+[12:36:00.256]   Data: 0xD8, ACK=True
+[12:36:00.256] STOP detected
 
-[22:39:00.109] START detected
-[22:39:00.304] Address: 0x4A WRITE, ACK=True
-[22:39:00.499]   Data: 0xC4, ACK=True
-[22:39:00.694]   Data: 0x08, ACK=False
-[22:39:00.890]   Data: 0xE2, ACK=True
-[22:39:00.890] STOP detected
+[12:36:00.448] START detected
+[12:36:00.644] Master initiated transaction: Address=0x38, WRITE, ACK=False
+[12:36:00.644] STOP detected
 
-[22:39:01.082] START detected
-[22:39:01.278] Address: 0x44 READ, ACK=True
-[22:39:01.474]   Data: 0x52, ACK=True
-[22:39:01.670]   Data: 0x88, ACK=True
-[22:39:01.865]   Data: 0xE1, ACK=False
-[22:39:01.865] STOP detected
+[12:36:00.645] START detected
+[12:36:00.840] Master initiated transaction: Address=0x41, READ, ACK=False
+[12:36:01.035]   Data: 0x06, ACK=False
+[12:36:01.230]   Data: 0x14, ACK=False
+[12:36:01.425]   Data: 0x00, ACK=True
+[12:36:01.619]   Data: 0x00, ACK=True
+[12:36:01.620] STOP detected
 
-[22:39:02.058] START detected
-[22:39:02.253] Address: 0x65 WRITE, ACK=False
-[22:39:02.448]   Data: 0xF2, ACK=False
-[22:39:02.643]   Data: 0x81, ACK=False
-[22:39:02.838]   Data: 0x2E, ACK=True
-[22:39:02.839] STOP detected
+[12:36:01.620] START detected
+[12:36:01.815] Master initiated transaction: Address=0x02, READ, ACK=True
+[12:36:01.815] STOP detected
 
-[22:39:02.839] START detected
-[22:39:03.033] Address: 0x40 WRITE, ACK=True
-[22:39:03.034] STOP detected
+[12:36:01.816] START detected
+[12:36:02.010] Master initiated transaction: Address=0x02, WRITE, ACK=False
+[12:36:02.206]   Data: 0x03, ACK=False
+[12:36:02.207] STOP detected
 
-[22:39:03.034] START detected
-[22:39:03.229] Address: 0x40 READ, ACK=False
-[22:39:03.425]   Data: 0x33, ACK=True
-[22:39:03.621]   Data: 0x1E, ACK=True
-[22:39:03.816]   Data: 0x60, ACK=True
-[22:39:03.817] STOP detected
+[12:36:02.207] START detected
+[12:36:02.594] Master initiated transaction: Address=0x18, WRITE, ACK=True
+[12:36:02.595] STOP detected
 
-[22:39:03.817] START detected
-[22:39:04.204] Address: 0x20 WRITE, ACK=True
-[22:39:04.399]   Data: 0x45, ACK=True
-[22:39:04.400] STOP detected
+[12:36:02.596] START detected
+[12:36:02.791] Master initiated transaction: Address=0x03, WRITE, ACK=False
+[12:36:02.986]   Data: 0x02, ACK=False
+[12:36:03.181]   Data: 0x2A, ACK=True
+[12:36:03.376]   Data: 0x02, ACK=True
+[12:36:03.571]   Data: 0x0E, ACK=False
+[12:36:03.766]   Data: 0x04, ACK=False
+[12:36:03.961]   Data: 0x05, ACK=False
+[12:36:04.156]   Data: 0x04, ACK=True
+[12:36:04.156] STOP detected
 
-[22:39:04.400] START detected
-[22:39:04.789] Address: 0x19 READ, ACK=True
-[22:39:04.984]   Data: 0x50, ACK=False
-[22:39:05.180]   Data: 0xC1, ACK=True
-[22:39:05.180] STOP detected
+[12:36:04.156] START detected
+[12:36:04.351] Master initiated transaction: Address=0x03, WRITE, ACK=False
+[12:36:04.351] STOP detected
 
-[22:39:05.181] START detected
-[22:39:05.376] Address: 0x01 WRITE, ACK=True
-[22:39:05.571]   Data: 0xC2, ACK=True
-[22:39:05.767]   Data: 0x24, ACK=True
-[22:39:05.962]   Data: 0x4C, ACK=True
-[22:39:06.351]   Data: 0xC7, ACK=False
-[22:39:06.351] STOP detected
+[12:36:04.351] START detected
+[12:36:04.546] Master initiated transaction: Address=0x45, READ, ACK=True
+[12:36:04.546] STOP detected
 
-[22:39:06.351] START detected
-[22:39:06.546] Address: 0x43 WRITE, ACK=False
-[22:39:06.546] STOP detected
+[12:36:04.547] START detected
+[12:36:04.742] Master initiated transaction: Address=0x06, WRITE, ACK=False
+[12:36:04.937]   Data: 0x01, ACK=True
+[12:36:05.132]   Data: 0x8C, ACK=False
+[12:36:05.327]   Data: 0x2A, ACK=True
+[12:36:05.523]   Data: 0x2E, ACK=True
+[12:36:05.718]   Data: 0x34, ACK=True
+[12:36:05.912]   Data: 0x70, ACK=True
+[12:36:05.913] STOP detected
 
-[22:39:06.546] START detected
-[22:39:06.741] Address: 0x49 READ, ACK=True
-[22:39:06.937]   Data: 0x06, ACK=False
-[22:39:07.132]   Data: 0x0B, ACK=True
-[22:39:07.327]   Data: 0x02, ACK=True
-[22:39:07.327] STOP detected
+[12:36:05.913] START detected
+[12:36:06.109] Master initiated transaction: Address=0x08, WRITE, ACK=True
+[12:36:06.109] STOP detected
 
-[22:39:07.328] START detected
-[22:39:07.523] Address: 0x02 WRITE, ACK=True
-[22:39:07.717]   Data: 0x33, ACK=True
-[22:39:07.769] Stopped by user.
+[12:36:06.301] START detected
+[12:36:06.496] Master initiated transaction: Address=0x09, WRITE, ACK=True
+[12:36:06.691]   Data: 0xA0, ACK=False
+[12:36:06.887]   Data: 0xC1, ACK=True
+[12:36:06.887] STOP detected
+
+[12:36:06.887] START detected
+[12:36:07.081] Master initiated transaction: Address=0x40, READ, ACK=False
+[12:36:07.084]   Data: 0x50, ACK=True
+[12:36:07.084] STOP detected
+
