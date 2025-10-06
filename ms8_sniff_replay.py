@@ -1,193 +1,184 @@
 #!/usr/bin/env python3
 """
-ms8_sniff_replay.py
+I2C bus sniffer with master/slave direction tracking + delta replay.
 
 Workflow:
-  1) Sniff baseline for 10s (screen connected, idle) -> in-memory
-  2) Press Enter, then sniff another 10s while you press the target control(s)
-  3) Compute multiset-difference: transactions that appear more in the second capture than baseline
-  4) Show proposed WRITE transactions & their timings; press Enter to replay
-  5) Pause sniffer, replay the unique WRITE transactions with preserved inter-transaction delays
-  6) Resume sniffer, print results
+  1) Sniff baseline for 10s (do nothing) -> baseline_log
+  2) Press Enter -> sniff 10s while you press target control(s) -> command_log
+  3) Compute multiset-difference (transactions that appear more often in command_log)
+  4) Show WRITE candidates + preserved inter-transaction delays
+  5) Press Enter -> replay WRITE candidates with original timing (via /dev/i2c-1)
 
 Notes:
-- Uses pigpio for passive sniffing (GPIO2=SDA, GPIO3=SCL).
-- Uses smbus2 to actively transmit I2C writes via /dev/i2c-1.
-- Only WRITE transactions can be replayed; READs are skipped.
-- Timing is based on the deltas between transaction START timestamps (within the second window).
-
-Requirements:
-  sudo apt install pigpio python3-pigpio python3-smbus
-  sudo pip3 install smbus2
-  sudo systemctl start pigpiod
-
-Run:
-  sudo python3 ms8_sniff_replay.py
+- Keeps all original console/file logging behavior.
+- Uses pigpio for sniffing (GPIO2=SDA, GPIO3=SCL).
+- Uses smbus2 for replay (WRITE transactions only).
 """
 
-import errno
+import argparse
 import os
-import sys
 import time
-from dataclasses import dataclass, field
+from collections import Counter, defaultdict
+from dataclasses import dataclass
 from datetime import datetime
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 
 import pigpio
-from smbus2 import SMBus, i2c_msg
 
-# GPIO (BCM)
-SDA = 2
-SCL = 3
+try:
+    from smbus2 import SMBus, i2c_msg
+
+    HAVE_SMBUS2 = True
+except Exception:
+    HAVE_SMBUS2 = False
+
+SDA = 2  # GPIO 2 (pin 3)
+SCL = 3  # GPIO 3 (pin 5)
+LOG_FILENAME = "i2c_log.txt"
 I2C_BUS_NUM = 1
 
 BASELINE_SECONDS = 10
 COMMAND_SECONDS = 10
 
 
-# ------------- Data structures -------------
 @dataclass(frozen=True)
 class TxKey:
     addr: int
-    rw: int  # 0=WRITE, 1=READ
-    data: Tuple[int, ...]  # full payload as a tuple
+    rw: int  # 0 = WRITE, 1 = READ
+    data: Tuple[int, ...]  # payload bytes
 
 
 @dataclass
 class Transaction:
-    start_ts: float  # absolute time.time() at START
+    start_ts: float
     key: TxKey
 
 
-# ------------- Utilities -------------
-def ts_hhmmss():
-    return datetime.now().strftime("%H:%M:%S.%f")[:-3]
-
-
-def log(msg: str):
-    print(f"[{ts_hhmmss()}] {msg}")
-
-
-# ------------- Sniffer -------------
 class I2CSniffer:
-    def __init__(self, pi: pigpio.pi, sda=SDA, scl=SCL):
-        self.pi = pi
-        self.sda = sda
-        self.scl = scl
-        self._stop = False
+    def __init__(self, sda_pin=SDA, scl_pin=SCL, logfile=LOG_FILENAME, duration=20):
+        self.sda = sda_pin
+        self.scl = scl_pin
+        self.logfile_name = logfile
+        self.duration = duration
+        self._check_logfile()
+        self.logfile = open(logfile, "w", buffering=1)
+        self.pi = pigpio.pi()
+        if not self.pi.connected:
+            raise RuntimeError("Failed to connect to pigpio daemon")
 
-        self.pi.set_mode(self.sda, pigpio.INPUT)
-        self.pi.set_mode(self.scl, pigpio.INPUT)
+    def _check_logfile(self):
+        if os.path.exists(self.logfile_name):
+            response = input(
+                f"Log file '{self.logfile_name}' exists. Overwrite? (y/N): "
+            )
+            if response.lower() != "y":
+                raise FileExistsError("Log file exists and overwrite not confirmed")
 
-    def stop(self):
-        self._stop = True
+    def _timestamp(self):
+        return datetime.now().strftime("%H:%M:%S.%f")[:-3]
 
-    def _wait_level(self, pin: int, level: int, timeout: float = 0.05) -> bool:
-        """Wait until pin reads 'level' or timeout. Responsive to stop flag."""
-        end = time.time() + timeout
-        while time.time() < end:
-            if self._stop:
-                return False
-            if self.pi.read(pin) == level:
-                return True
-            time.sleep(0.0002)
-        return False
+    def log(self, msg):
+        ts = self._timestamp()
+        print(f"[{ts}] {msg}")
+        self.logfile.write(f"[{ts}] {msg}\n")
 
-    def _read_bit(self) -> Optional[int]:
-        """Read one I2C bit: sample SDA while SCL high (with timeouts)."""
-        if not self._wait_level(self.scl, 1, timeout=0.05):
-            return None
+    def wait_for_edge(self, pin, edge):
+        while self.pi.read(pin) != edge:
+            pass
+
+    def read_bit(self):
+        self.wait_for_edge(self.scl, 1)
         bit = self.pi.read(self.sda)
-        if not self._wait_level(self.scl, 0, timeout=0.05):
-            return None
+        self.wait_for_edge(self.scl, 0)
         return bit
 
-    def _read_byte(self) -> Optional[Tuple[int, int]]:
-        """Read 8 data bits + ACK bit. Returns (value, ack) where ack==0 is ACK."""
+    def read_byte(self):
         val = 0
         for _ in range(8):
-            b = self._read_bit()
-            if b is None:
-                return None
-            val = (val << 1) | (b & 1)
-        ack = self._read_bit()
-        if ack is None:
-            return None
+            val = (val << 1) | self.read_bit()
+        ack = self.read_bit()
         return val, ack
 
     def sniff_for(self, seconds: int) -> List[Transaction]:
-        """Sniff for 'seconds' and return list of parsed transactions."""
+        """Sniff for `seconds`, log to console/file, and return parsed transactions."""
+        self.log(f"Sniffing for {seconds} seconds...")
+        start_time = time.time()
         out: List[Transaction] = []
-        deadline = time.time() + seconds
+        try:
+            while time.time() - start_time < seconds:
+                # START: SDA low while SCL high
+                while not (self.pi.read(self.scl) == 1 and self.pi.read(self.sda) == 0):
+                    if time.time() - start_time >= seconds:
+                        raise TimeoutError
+                    pass
 
-        log(f"Sniffing for {seconds} seconds...")
-        while time.time() < deadline and not self._stop:
-            # Look for START: SDA low while SCL high
-            if not (self.pi.read(self.scl) == 1 and self.pi.read(self.sda) == 0):
-                time.sleep(0.0005)
-                continue
+                t0 = time.time()
+                self.log("START detected")
 
-            start_ts = time.time()
-            # addr + R/W
-            hdr = self._read_byte()
-            if hdr is None:
-                # couldn't parse a header; skip this start
-                continue
-            addr_rw, ack = hdr
-            addr = addr_rw >> 1
-            rw = addr_rw & 1
-            payload: List[int] = []
-
-            # Read until STOP (SDA & SCL both high)
-            while True:
-                if self.pi.read(self.scl) == 1 and self.pi.read(self.sda) == 1:
-                    break
-                b = self._read_byte()
-                if b is None:
-                    # give up on this transaction
-                    break
-                val, ackb = b
-                payload.append(val)
-
-            out.append(
-                Transaction(
-                    start_ts=start_ts, key=TxKey(addr=addr, rw=rw, data=tuple(payload))
+                # Address + R/W
+                addr_rw, ack = self.read_byte()
+                addr = addr_rw >> 1
+                rw = addr_rw & 1
+                rw_str = "READ" if rw else "WRITE"
+                self.log(
+                    f"Master initiated transaction: Address=0x{addr:02X}, {rw_str}, ACK={ack == 0}"
                 )
-            )
-        log(f"Captured {len(out)} transactions.")
+
+                payload = []
+                # Read until STOP (SDA & SCL both high)
+                while True:
+                    if self.pi.read(self.scl) == 1 and self.pi.read(self.sda) == 1:
+                        self.log("STOP detected\n")
+                        break
+                    byte, ackb = self.read_byte()
+                    payload.append(byte)
+                    self.log(f"  Data: 0x{byte:02X}, ACK={ackb == 0}")
+
+                out.append(
+                    Transaction(
+                        start_ts=t0, key=TxKey(addr=addr, rw=rw, data=tuple(payload))
+                    )
+                )
+
+        except TimeoutError:
+            self.log(f"Reached {seconds} second capture limit.")
+        except KeyboardInterrupt:
+            self.log("Stopped by user.")
         return out
 
+    def cleanup(self):
+        self.logfile.close()
+        self.pi.stop()
 
-# ------------- Multiset difference & timing -------------
+    # Original run() kept for compatibility if you want a single 20s capture:
+    def run(self):
+        txs = self.sniff_for(self.duration)
+        self.cleanup()
+        print("\nLogging complete.")
+        return txs
+
+
 def multiset_difference(
     new: List[Transaction], base: List[Transaction]
 ) -> List[Transaction]:
-    """
-    Return transactions that appear more times in 'new' than in 'base'.
-    Equality is by (addr, rw, full data payload). Preserves the order they
-    appeared in 'new', but only as many extra occurrences as the overage count.
-    """
-    from collections import Counter, defaultdict, deque
-
+    """Return transactions that occur more times in `new` than in `base` (preserve order)."""
     key = lambda t: t.key
-    base_counts = Counter([key(t) for t in base])
-    new_counts = Counter([key(t) for t in new])
+    bc = Counter(key(t) for t in base)
+    nc = Counter(key(t) for t in new)
+    over = {k: max(0, nc[k] - bc.get(k, 0)) for k in nc.keys()}
 
-    over = {k: max(0, new_counts[k] - base_counts.get(k, 0)) for k in new_counts.keys()}
-
-    # Now walk 'new' in time order, keep as many instances as over[k]
-    buckets = defaultdict(int)
+    kept_counts = defaultdict(int)
     results: List[Transaction] = []
     for t in sorted(new, key=lambda x: x.start_ts):
         k = key(t)
-        if over.get(k, 0) > buckets[k]:
+        if over.get(k, 0) > kept_counts[k]:
             results.append(t)
-            buckets[k] += 1
+            kept_counts[k] += 1
     return results
 
 
 def compute_intervals(txs: List[Transaction]) -> List[float]:
-    """Compute inter-transaction delays (seconds) between consecutive transactions."""
+    """Inter-START delays between consecutive transactions."""
     if not txs:
         return []
     txs_sorted = sorted(txs, key=lambda t: t.start_ts)
@@ -197,21 +188,27 @@ def compute_intervals(txs: List[Transaction]) -> List[float]:
     return delays
 
 
-# ------------- Replayer -------------
-def replay_transactions(
-    txs: List[Transaction], delays: List[float], bus_num: int = I2C_BUS_NUM
+def replay_writes(
+    txs: List[Transaction], delays: List[float], bus_num: int = I2C_BUS_NUM, log=print
 ):
-    """
-    Replays only WRITE transactions (rw=0) with given inter-transaction delays.
-    """
+    if not HAVE_SMBUS2:
+        log("smbus2 not installed. Install with: sudo pip3 install smbus2")
+        return
     if len(txs) != len(delays):
-        raise ValueError("txs and delays length mismatch")
-
-    if not txs:
-        log("Nothing to replay.")
+        log("Internal error: tx/delay list mismatch")
         return
 
-    log(f"Opening /dev/i2c-{bus_num}...")
+    # Only WRITE transactions
+    writes = [
+        (t, d)
+        for t, d in zip(sorted(txs, key=lambda t: t.start_ts), delays)
+        if t.key.rw == 0
+    ]
+    if not writes:
+        log("No WRITE transactions to replay.")
+        return
+
+    log(f"Opening /dev/i2c-{bus_num} for replay...")
     try:
         bus = SMBus(bus_num)
     except Exception as e:
@@ -219,100 +216,94 @@ def replay_transactions(
         return
 
     try:
-        for idx, (t, dly) in enumerate(
-            zip(sorted(txs, key=lambda x: x.start_ts), delays), start=1
-        ):
+        for idx, (t, dly) in enumerate(writes, start=1):
             if dly > 0:
                 time.sleep(dly)
-
-            if t.key.rw != 0:
-                log(f"Skip READ  addr=0x{t.key.addr:02X}, data={len(t.key.data)} bytes")
-                continue
-
             payload = bytes(t.key.data)
-            if len(payload) == 0:
-                # legal zero-length addressed write (some devices use as ping)
-                msg = i2c_msg.write(t.key.addr, b"")
-            else:
-                msg = i2c_msg.write(t.key.addr, payload)
-
             log(
                 f"WRITE #{idx} -> addr=0x{t.key.addr:02X}, bytes=[{' '.join(f'{b:02X}' for b in payload)}], delay_before={dly:.3f}s"
             )
             try:
+                msg = i2c_msg.write(t.key.addr, payload)
                 bus.i2c_rdwr(msg)
                 log("  result: OK")
             except OSError as oe:
-                err_no = getattr(oe, "errno", None)
-                err_str = os.strerror(err_no) if err_no else str(oe)
-                log(f"  OSError errno={err_no} ({err_str})  EXC={oe!r}")
+                err = getattr(oe, "errno", None)
+                log(f"  OSError errno={err}: {oe}")
             except Exception as e:
-                log(f"  Exception: {e!r}")
-
+                log(f"  Exception: {e}")
     finally:
         try:
             bus.close()
         except Exception:
             pass
-        log("Replay done.")
+        log("Replay complete.")
 
 
-# ------------- Main flow -------------
 def main():
-    # Ensure pigpio is running
-    pi = pigpio.pi()
-    if not pi.connected:
-        print("pigpio daemon not running. Start it with: sudo systemctl start pigpiod")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(
+        description="I2C sniffer with two-phase capture and delta replay"
+    )
+    parser.add_argument(
+        "--logfile",
+        default="i2c_log.txt",
+        help="Log file name (default: i2c_log.txt)",
+    )
+    parser.add_argument(
+        "--baseline",
+        type=int,
+        default=BASELINE_SECONDS,
+        help=f"Baseline capture seconds (default: {BASELINE_SECONDS})",
+    )
+    parser.add_argument(
+        "--command",
+        type=int,
+        default=COMMAND_SECONDS,
+        help=f"Command-window capture seconds (default: {COMMAND_SECONDS})",
+    )
+    args = parser.parse_args()
 
-    sniffer = I2CSniffer(pi)
+    sniffer = I2CSniffer(logfile=args.logfile, duration=args.baseline)
     try:
         # Phase 1: Baseline
-        base = sniffer.sniff_for(BASELINE_SECONDS)
-        log(
-            "Baseline captured. Press Enter when ready to capture the command window (perform your action during the next 10s)..."
+        base = sniffer.sniff_for(args.baseline)
+        sniffer.log(f"Baseline captured: {len(base)} transactions.")
+        sniffer.log(
+            "Press Enter to start the 10s command capture; during that window, press your control(s)."
         )
         input()
 
         # Phase 2: Command window
-        cmd = sniffer.sniff_for(COMMAND_SECONDS)
+        cmd = sniffer.sniff_for(args.command)
+        sniffer.log(f"Command window captured: {len(cmd)} transactions.")
 
-        # Compare / delta
+        # Deltas
         diffs = multiset_difference(cmd, base)
         if not diffs:
-            log("No differences found between baseline and command window.")
+            sniffer.log("No differences found between baseline and command window.")
             return
 
-        # Summarize proposed replays (only WRITE)
-        log("Unique transactions found (WRITE candidates):")
+        # Show candidates
+        sniffer.log("Unique transactions (WRITE candidates marked with '*'):")
         for t in sorted(diffs, key=lambda x: x.start_ts):
-            rw = "READ" if t.key.rw else "WRITE"
-            log(
-                f"  {rw} addr=0x{t.key.addr:02X}, data=[{' '.join(f'{b:02X}' for b in t.key.data)}]"
+            mark = "*" if t.key.rw == 0 else " "
+            sniffer.log(
+                f"{mark} {('WRITE' if t.key.rw==0 else 'READ ')} 0x{t.key.addr:02X}  data=[{' '.join(f'{b:02X}' for b in t.key.data)}]"
             )
 
-        # Compute inter-transaction delays from the command window timing
         delays = compute_intervals(diffs)
-
-        log("\nReady to replay ONLY the unique WRITE transactions preserving timing.")
-        log("Press Enter to begin replay, or Ctrl+C to abort.")
+        sniffer.log(
+            "Ready to replay ONLY the WRITE transactions with preserved timing."
+        )
+        sniffer.log("Press Enter to replay, or Ctrl+C to abort.")
         input()
 
-        # Pause sniffing while we replay to avoid collisions
-        # (Simplest approach: just stop sniffer, replay, then we're done.)
-        # If you want to continue sniffing after replay, restructure to pause instead of stop.
-        sniffer.stop()
-
-        replay_transactions(diffs, delays, bus_num=I2C_BUS_NUM)
+        # Phase 3: Replay
+        replay_writes(diffs, delays, bus_num=I2C_BUS_NUM, log=sniffer.log)
 
     finally:
-        sniffer.stop()
-        time.sleep(0.1)
-        try:
-            pi.stop()
-        except Exception:
-            pass
-        log("Exiting.")
+        sniffer.cleanup()
+        print("\nDone.")
 
 
 if __name__ == "__main__":
